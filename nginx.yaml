@@ -18,7 +18,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: 10
+  replicas: 5
   selector:
     matchLabels:
       app: nginx
@@ -33,7 +33,9 @@ spec:
     spec:
       containers:
       - name: nginx-container
-        image: stratcastor/duo-deploy-nginx:latest
+        image: chloealex/duo-nginx:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+
+
