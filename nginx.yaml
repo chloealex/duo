@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: nginx-container
-        image: chloealex/duo-nginx:v1
+        image: chloealex/duo-nginx:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
