@@ -29,7 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    } if (env.GIT_BRANCH == 'main') {
+                      if (env.GIT_BRANCH == 'main') {
                         sh'''
                         kubectl apply -f . --namespace=production
                         kubectl rollout restart deployment backend --namespace=production
