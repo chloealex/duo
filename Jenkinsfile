@@ -1,54 +1,58 @@
-pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                script {
-                    if (env.GIT_BRANCH == 'main') {
-                    sh 'docker build -t chloealex/duo-backend:latest -t chloealex/duo-backend:$BUILD_NUMBER .'
-                    } else {
-                        sh "echo 'Build not required!'"
-                    }
+pipeline{
+
+        agent any
+
+        stages{
+
+            stage('Build docker images on Jenkins'){
+
+                steps{
+
+                    sh '''
+
+                    docker build -t chloealex/duo-nginx:latest ./nginx
+
+                    docker build -t chloealex/duo-flask:latest .
+
+                    '''
+
                 }
+
             }
-        }
-        stage('Push') {
-            steps {
-                script {
-                    if (env.GIT_BRANCH == 'main') {
-                        sh '''
-                        docker push chloealex/duo-backend:latest
-                        docker push chloealex/duo-backend:$BUILD_NUMBER
-                        '''
-                    } else {
-                        sh "echo 'Push not required!'"
-                    }
+
+            stage('Push images to Docker Hub'){
+
+                steps{
+
+                    sh '''
+
+                    docker push chloealex/duo-nginx:latest
+
+                    docker push chloealex/duo-flask:latest
+
+                    '''
+
                 }
+
             }
-        }
-        stage('Deploy') {
-            steps {
-                script {
-                      if (env.GIT_BRANCH == 'main') {
-                        sh'''
-                        kubectl apply -f . --namespace=production
-                        kubectl rollout restart deployment backend --namespace=production
-                        '''
-                    } else {
-                        sh'''
-                        echo "unrecognised branch"
-                        '''
-                    }
+
+            stage('Run a rollout restart'){
+
+                steps{
+
+                    sh '''
+
+                    kubectl apply -f .
+
+                    kubectl rollout restart deployment flask-deployment
+
+                    '''
+
                 }
+
             }
+
         }
-        stage('Clean Up') { 
-            steps {
-                sh '''
-                docker system prune -a --force
-                '''
-            }
-        }
-    }
+
 }
 
