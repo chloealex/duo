@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == 'development') {
-                    sh 'docker build -t stratcastor/duo-backend:latest -t stratcastor/duo-backend:$BUILD_NUMBER .'
+                    sh 'docker build -t chloealex/duo-backend:latest -t chloealex/duo-backend:$BUILD_NUMBER .'
                     } else {
                         sh "echo 'Build not required!'"
                     }
@@ -17,8 +17,8 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == 'development') {
                         sh '''
-                        docker push stratcastor/duo-backend:latest
-                        docker push stratcastor/duo-backend:$BUILD_NUMBER
+                        docker push chloealex/duo-backend:latest
+                        docker push chloealex/duo-backend:$BUILD_NUMBER
                         '''
                     } else {
                         sh "echo 'Push not required!'"
@@ -31,8 +31,8 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == 'development') {
                         sh'''
-                        kubectl apply -f . --namespace=development
-                        kubectl rollout restart deployment backend --namespace=development
+                        kubectl apply -f . --namespace=preprod
+                        kubectl rollout restart deployment backend --namespace=preprod
                         '''
                     } else if (env.GIT_BRANCH == 'main') {
                         sh'''
