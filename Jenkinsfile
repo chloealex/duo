@@ -4,7 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'development') {
+                    if (env.GIT_BRANCH == 'main') {
                     sh 'docker build -t chloealex/duo-backend:latest -t chloealex/duo-backend:$BUILD_NUMBER .'
                     } else {
                         sh "echo 'Build not required!'"
@@ -15,7 +15,7 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'development') {
+                    if (env.GIT_BRANCH == 'main') {
                         sh '''
                         docker push chloealex/duo-backend:latest
                         docker push chloealex/duo-backend:$BUILD_NUMBER
@@ -29,12 +29,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == 'development') {
-                        sh'''
-                        kubectl apply -f . --namespace=preprod
-                        kubectl rollout restart deployment backend --namespace=preprod
-                        '''
-                    } else if (env.GIT_BRANCH == 'main') {
+                    } if (env.GIT_BRANCH == 'main') {
                         sh'''
                         kubectl apply -f . --namespace=production
                         kubectl rollout restart deployment backend --namespace=production
