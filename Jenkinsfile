@@ -36,6 +36,20 @@ pipeline{
 
             }
 
+            stage('Clean up'){
+
+                steps{
+
+                    sh '''
+
+                    docker system prune -a --force
+
+                    '''
+
+                }
+
+            }
+
             stage('Run a rollout restart'){
 
                 steps{
