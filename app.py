@@ -12,7 +12,7 @@ def home():
     hostname = getenv('HOSTNAME')
     name = getenv('YOUR_NAME')
     if name is None:
-      name = "friend"
+      name = "Chloe"
     return f"<h1>Hello {name}.</h1>\n\n<h2>I'm currently running in {hostname}.</h2>\n\n<h2> {name} needs a peach iced tea</h2>"
 
 if __name__=='__main__':
